@@ -33,7 +33,7 @@ public class ToDoDatabase {
     }
     public static ArrayList<ToDoItem> selectToDos(Connection conn) throws SQLException {
         ArrayList<ToDoItem> items = new ArrayList<>();
-       Statement stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM todos");
         while (results.next()) {
             int id = results.getInt("id");
@@ -45,9 +45,9 @@ public class ToDoDatabase {
     }
 
     public void toggleToDo(Connection conn, int id) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("UPDATE todos SET is_done = NOT is_done WHERE id = ?");
-        stmt.setInt(1, id);
-        stmt.execute();
+//        PreparedStatement stmt = conn.prepareStatement("UPDATE todos SET is_done = NOT is_done WHERE id = ?");
+//        stmt.setInt(1, id);
+//        stmt.execute();
     }
 
 }

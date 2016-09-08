@@ -55,7 +55,7 @@ public class ToDoDatabaseTest {
         todoDatabase.insertToDo(conn, todoText);
 
         // make sure we can retrieve the todo we just created
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM todos where text = ?");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM todos");
         stmt.setString(1, todoText);
         ResultSet results = stmt.executeQuery();
         assertNotNull(results);
@@ -103,6 +103,44 @@ public class ToDoDatabaseTest {
         todoDatabase.deleteToDo(conn, secondToDoText);
     }
 
+    @Test
+    public void testToggle() throws Exception{
+        Connection conn = DriverManager.getConnection(ToDoDatabase.DB_URL);
 
+        System.out.println("Create a new item");
+        String toggleToDoText = "UnitTest-ToDoToggle";
+
+        ArrayList<ToDoItem> todos = todoDatabase.selectToDos(conn);
+        //todoDatabase.insertToDo(conn, toggleToDoText);
+
+
+        System.out.println("Found " + todos.size() + " todos in the database");
+
+
+        System.out.println("Retrieve it - save id");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * todos WHERE text = ? " );
+
+
+
+        ResultSet results = stmt.executeQuery();
+        int toggleTestId = results.getInt("id");
+
+        System.out.println("Change it/call toggle method");
+        todoDatabase.toggleToDo(conn, toggleTestId); //does this save it?
+
+
+        System.out.println("retrieve it by id & ensure it's been toggled");
+        PreparedStatement stmtCheck = conn.prepareStatement("SELECT * FROM todos WHERE id = ?");
+        ResultSet resultsAfterToggle = stmtCheck.executeQuery();
+        //boolean toggleT = resultsAfterToggle.getBoolean("is_done");
+
+
+        //assertEquals("not is_done", toggleT);
+
+
+        System.out.println("delete it... by id");
+        //todoDatabase.deleteToDo(conn, toggleToDoText);
+
+    }
 
 }
