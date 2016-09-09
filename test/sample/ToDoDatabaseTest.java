@@ -110,36 +110,21 @@ public class ToDoDatabaseTest {
         System.out.println("Create a new item");
         String toggleToDoText = "UnitTest-ToDoToggle";
 
+
         ArrayList<ToDoItem> todos = todoDatabase.selectToDos(conn);
-        //todoDatabase.insertToDo(conn, toggleToDoText);
+        todoDatabase.insertToDo(conn, toggleToDoText);
 
 
         System.out.println("Found " + todos.size() + " todos in the database");
 
-
         System.out.println("Retrieve it - save id");
-        PreparedStatement stmt = conn.prepareStatement("SELECT * todos WHERE text = ? " );
-
-
-
-        ResultSet results = stmt.executeQuery();
-        int toggleTestId = results.getInt("id");
 
         System.out.println("Change it/call toggle method");
-        todoDatabase.toggleToDo(conn, toggleTestId); //does this save it?
-
 
         System.out.println("retrieve it by id & ensure it's been toggled");
-        PreparedStatement stmtCheck = conn.prepareStatement("SELECT * FROM todos WHERE id = ?");
-        ResultSet resultsAfterToggle = stmtCheck.executeQuery();
-        //boolean toggleT = resultsAfterToggle.getBoolean("is_done");
-
-
-        //assertEquals("not is_done", toggleT);
-
 
         System.out.println("delete it... by id");
-        //todoDatabase.deleteToDo(conn, toggleToDoText);
+
 
     }
 

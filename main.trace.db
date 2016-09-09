@@ -370,3 +370,22 @@ org.h2.jdbc.JdbcSQLException: Invalid value "1" for parameter "parameterIndex" [
 2016-09-08 16:52:22 jdbc[4]: exception
 org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT * TODOS[*] WHERE TEXT = ?  "; SQL statement:
 SELECT * todos WHERE text = ?  [42000-191]
+2016-09-08 16:54:52 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "SELECT * TODOS[*] "; SQL statement:
+SELECT * todos [42000-191]
+2016-09-08 16:55:39 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: No data is available [2000-191]
+2016-09-08 16:58:59 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: No data is available [2000-191]
+2016-09-08 17:03:58 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "DELETE *[*] FROM TODOS "; expected "identifier"; SQL statement:
+DELETE * FROM todos [42001-191]
+2016-09-08 17:05:05 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "DELETE *[*] FROM TODOS "; expected "identifier"; SQL statement:
+DELETE * FROM todos [42001-191]
+2016-09-08 17:05:42 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "DELETE *[*] FROM TODOS "; expected "identifier"; SQL statement:
+DELETE * FROM todos [42001-191]
+2016-09-08 17:06:44 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "DELETE FROM *[*] TODOS "; expected "identifier"; SQL statement:
+DELETE FROM * todos [42001-191]
