@@ -10,15 +10,23 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class SampleFXMLApp extends Application {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         System.out.println("Welcome to the TIY TODO App");
 
         launch(args);
+//
+//        ToDoDatabase myDB = new ToDoDatabase();
+//        try {
+//            myDB.init();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
