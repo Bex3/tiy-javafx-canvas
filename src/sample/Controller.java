@@ -14,23 +14,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
-import static sample.ToDoDatabase.DB_URL;
-
-public class Controller implements Initializable  {
+public class Controller implements Initializable {
     @FXML
     ListView todoList;
 
     @FXML
     TextField todoText;
-
-    ToDoDatabase myToDoDatabase = new ToDoDatabase();
-
 
     ObservableList<ToDoItem> todoItems = FXCollections.observableArrayList();
     ArrayList<ToDoItem> savableList = new ArrayList<ToDoItem>();
@@ -38,29 +33,31 @@ public class Controller implements Initializable  {
 
     public String username;
 
+
+    ToDoDatabase myToDoDatabase = new ToDoDatabase();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        myToDoDatabase.selectToDos(conn);
+        System.out.println("Starting");
+        //myToDoDatabase.selectToDos(conn);
 
+        System.out.print("Please enter your name: ");
+        Scanner inputScanner = new Scanner(System.in);
+        username = inputScanner.nextLine();
 
+        if (username != null && !username.isEmpty()) {
+            fileName = username + ".json";
+        }
 
-//        System.out.print("Please enter your name: ");
-//        Scanner inputScanner = new Scanner(System.in);
-//        username = inputScanner.nextLine();
-//
-//        if (username != null && !username.isEmpty()) {
-//            fileName = username + ".json";
-//        }
-//
-//        System.out.println("Checking existing list ...");
-//        ToDoItemList retrievedList = retrieveList();
-//        if (retrievedList != null) {
-//            for (ToDoItem item : retrievedList.todoItems) {
-//                todoItems.add(item);
-//            }
-//        }
+        System.out.println("Checking existing list ...");
+        ToDoItemList retrievedList = retrieveList();
+        if (retrievedList != null) {
+            for (ToDoItem item : retrievedList.todoItems) {
+                todoItems.add(item);
+            }
+        }
 
-//        todoList.setItems(todoItems);
+        todoList.setItems(todoItems);
     }
 
     public void saveToDoList() {
@@ -75,10 +72,9 @@ public class Controller implements Initializable  {
     }
 
     public void addItem() {
-        myToDoDatabase.insertToDo(Connection conn, String text );
-        //        System.out.println("Adding item ...");
-//        todoItems.add(new ToDoItem(todoText.getText()));
-//        todoText.setText("");
+        System.out.println("Adding item ...");
+        todoItems.add(new ToDoItem(todoText.getText()));
+        todoText.setText("");
     }
 
     public void removeItem() {
@@ -135,5 +131,6 @@ public class Controller implements Initializable  {
             return null;
         }
     }
-    
+
+
 }

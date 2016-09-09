@@ -55,7 +55,7 @@ public class ToDoDatabaseTest {
         todoDatabase.insertToDo(conn, todoText);
 
         // make sure we can retrieve the todo we just created
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM todos");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM todos WHERE text = ?");
         stmt.setString(1, todoText);
         ResultSet results = stmt.executeQuery();
         assertNotNull(results);
@@ -109,22 +109,50 @@ public class ToDoDatabaseTest {
 
         System.out.println("Create a new item");
         String toggleToDoText = "UnitTest-ToDoToggle";
-
-
-        ArrayList<ToDoItem> todos = todoDatabase.selectToDos(conn);
         todoDatabase.insertToDo(conn, toggleToDoText);
 
+        ArrayList<ToDoItem> todos = todoDatabase.selectToDos(conn);
 
-        System.out.println("Found " + todos.size() + " todos in the database");
+        boolean beforeToggletest = todos.get(0).isDone;
 
-        System.out.println("Retrieve it - save id");
+        todoDatabase.toggleToDo(conn, todos.get(0).id);
 
-        System.out.println("Change it/call toggle method");
+        todos = todoDatabase.selectToDos(conn);
 
-        System.out.println("retrieve it by id & ensure it's been toggled");
+        assertTrue(beforeToggletest != todos.get(0).isDone);
 
-        System.out.println("delete it... by id");
 
+
+
+
+
+
+//        System.out.println("Found " + todos.size() + " todos in the database");
+//
+//
+//        System.out.println("Retrieve it - save id");
+//        PreparedStatement stmt = conn.prepareStatement("SELECT * todos WHERE text = ?" );
+//        stmt.execute("INSERT INTO tododatabase VALUES (NULL,'UnitTest-ToDoToggle', NOT is_done)");
+//
+//
+//        ResultSet results = stmt.executeQuery();
+//        int toggleTestId = results.getInt("id");
+//
+//        System.out.println("Change it/call toggle method");
+//        todoDatabase.toggleToDo(conn, toggleTestId); //does this save it?
+//
+//
+//        System.out.println("retrieve it by id & ensure it's been toggled");
+//        PreparedStatement stmtCheck = conn.prepareStatement("SELECT * FROM todos WHERE id = ?");
+//        ResultSet resultsAfterToggle = stmtCheck.executeQuery();
+//        //boolean toggleT = resultsAfterToggle.getBoolean("is_done");
+//
+//
+//        //assertEquals("not is_done", toggleT);
+//
+//
+//        System.out.println("delete it... by id");
+//        //todoDatabase.deleteToDo(conn, toggleToDoText);
 
     }
 
