@@ -83,6 +83,31 @@ public class ToDoDatabaseTest {
     }
 
     @Test
+    public void testSelectAllToDos() throws Exception {
+        Connection conn = DriverManager.getConnection(ToDoDatabase.DB_URL);
+        String firstToDoText = "UnitTest-ToDo1";
+        String secondToDoText = "UnitTest-ToDo2";
+
+        ArrayList<ToDoItem> todos = todoDatabase.selectToDos(conn);
+        int todosBefore = todos.size();
+
+
+        todoDatabase.insertToDo(conn, firstToDoText);
+        todoDatabase.insertToDo(conn, secondToDoText);
+
+        todos = todoDatabase.selectToDos(conn);
+
+//        ArrayList<ToDoItem> todos = todoDatabase.selectToDos(conn);
+        System.out.println("Found " + todos.size() + " todos in the database");
+
+        assertTrue("There should be at least 2 todos in the database (there are " +
+                todos.size() + ")", todos.size() >= todosBefore + 2);
+
+        todoDatabase.deleteToDo(conn, firstToDoText);
+        todoDatabase.deleteToDo(conn, secondToDoText);
+    }
+
+    @Test
     public void testToggle() throws Exception{
         Connection conn = DriverManager.getConnection(ToDoDatabase.DB_URL);
 
