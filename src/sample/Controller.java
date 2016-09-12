@@ -8,11 +8,17 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import jodd.json.JsonParser;
 import jodd.json.JsonSerializer;
+import org.h2.engine.Database;
+import org.h2.tools.Server;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
@@ -28,82 +34,110 @@ public class Controller implements Initializable {
     ObservableList<ToDoItem> todoItems = FXCollections.observableArrayList();
     ArrayList<ToDoItem> savableList = new ArrayList<ToDoItem>();
     String fileName = "todos.json";
-
     public String username;
+    Connection conn;
+    ToDoDatabase db;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        db = new ToDoDatabase();
+        try {
+            db.init();
+            conn = DriverManager.getConnection("jdbc:h2:./main");
 
-        System.out.print("Please enter your name: ");
-        Scanner inputScanner = new Scanner(System.in);
-        username = inputScanner.nextLine();
-
-        if (username != null && !username.isEmpty()) {
-            fileName = username + ".json";
-        }
-
-        System.out.println("Checking existing list ...");
-        ToDoItemList retrievedList = retrieveList();
-        if (retrievedList != null) {
-            for (ToDoItem item : retrievedList.todoItems) {
-                todoItems.add(item);
+            }catch (Exception exception){
+            exception.printStackTrace();
             }
-        }
-
-        todoList.setItems(todoItems);
     }
+
+
+//        System.out.print("Please enter your name: ");
+//        Scanner inputScanner = new Scanner(System.in);
+//        username = inputScanner.nextLine();
+//
+//        if (username != null && !username.isEmpty()) {
+//            fileName = username + ".json";
+//        }
+//
+//        System.out.println("Checking existing list ...");
+//        ToDoItemList retrievedList = retrieveList();
+//        if (retrievedList != null) {
+//            for (ToDoItem item : retrievedList.todoItems) {
+//                todoItems.add(item);
+//            }
+//        }
+
+//        todoList.setItems(todoItems);
+//    }
 
     public void saveToDoList() {
         if (todoItems != null && todoItems.size() > 0) {
             System.out.println("Saving " + todoItems.size() + " items in the list");
             savableList = new ArrayList<ToDoItem>(todoItems);
             System.out.println("There are " + savableList.size() + " items in my savable list");
-            saveList();
+//            saveList();
+
         } else {
             System.out.println("No items in the ToDo List");
         }
     }
 
     public void addItem() {
-        System.out.println("Adding item ...");
-        todoItems.add(new ToDoItem(todoText.getText()));
-        todoText.setText("");
-    }
-
-    public void removeItem() {
-        ToDoItem todoItem = (ToDoItem)todoList.getSelectionModel().getSelectedItem();
-        System.out.println("Removing " + todoItem.text + " ...");
-        todoItems.remove(todoItem);
-    }
-
-    public void toggleItem() {
-        System.out.println("Toggling item ...");
-        ToDoItem todoItem = (ToDoItem)todoList.getSelectionModel().getSelectedItem();
-        if (todoItem != null) {
-            todoItem.isDone = !todoItem.isDone;
-            todoList.setItems(null);
-            todoList.setItems(todoItems);
+        try {
+            System.out.println("Adding item ...");
+            todoItems.add(new ToDoItem(todoText.getText()));
+            db.insertToDo(conn, todoText.getText());
+            todoText.setText("");
+        } catch (Exception exception){
+            exception.printStackTrace();
         }
     }
 
-    public void saveList() {
+    public void removeItem() {
         try {
-
-            // write JSON
-            JsonSerializer jsonSerializer = new JsonSerializer().deep(true);
-            String jsonString = jsonSerializer.serialize(new ToDoItemList(todoItems));
-
-            System.out.println("JSON = ");
-            System.out.println(jsonString);
-
-            File sampleFile = new File(fileName);
-            FileWriter jsonWriter = new FileWriter(sampleFile);
-            jsonWriter.write(jsonString);
-            jsonWriter.close();
+            ToDoItem todoItem = (ToDoItem) todoList.getSelectionModel().getSelectedItem();
+            System.out.println("Removing " + todoItem.text + " ...");
+            db.deleteToDo(conn, todoText.getText());
+            todoItems.remove(todoItem);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
+
+    public void toggleItem() {
+        try {
+            System.out.println("Toggling item ...");
+            ToDoItem todoItem = (ToDoItem) todoList.getSelectionModel().getSelectedItem();
+            if (todoItem != null) {
+                todoItem.isDone = !todoItem.isDone;
+                todoList.setItems(null);
+                todoList.setItems(todoItems);
+                db.toggleToDo(conn,);
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+    }
+//
+//    public void saveList() {
+//        try {
+//
+//            // write JSON
+//            JsonSerializer jsonSerializer = new JsonSerializer().deep(true);
+//            String jsonString = jsonSerializer.serialize(new ToDoItemList(todoItems));
+//
+//            System.out.println("JSON = ");
+//            System.out.println(jsonString);
+//
+//            File sampleFile = new File(fileName);
+//            FileWriter jsonWriter = new FileWriter(sampleFile);
+//            jsonWriter.write(jsonString);
+//            jsonWriter.close();
+//        } catch (Exception exception) {
+//            exception.printStackTrace();
+//        }
+//    }
 
     public ToDoItemList retrieveList() {
         try {
@@ -124,5 +158,5 @@ public class Controller implements Initializable {
             return null;
         }
     }
-    
+
 }
