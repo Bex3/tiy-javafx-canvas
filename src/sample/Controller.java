@@ -43,6 +43,10 @@ public class Controller implements Initializable {
             db.init();
             conn = DriverManager.getConnection("jdbc:h2:./main");
             savableList = db.selectToDos(conn);
+            for (ToDoItem item : savableList) {
+                todoItems.add(item);
+            }
+
 
             }catch (Exception exception){
             exception.printStackTrace();
