@@ -19,7 +19,31 @@ public class ToDoItem {
         this.isDone = false;
     }
 
-//    public ToDoItem() {}
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public ToDoItem() {}
 
     @Override
     public String toString() {

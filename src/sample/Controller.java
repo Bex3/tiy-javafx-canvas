@@ -15,10 +15,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
@@ -88,8 +85,8 @@ public class Controller implements Initializable {
     public void addItem() {
         try {
             System.out.println("Adding item ...");
-            db.insertToDo(conn, todoText.getText());
-            todoItems.add(new ToDoItem(todoText.getText()));
+            int todoId = db.insertToDo(conn, todoText.getText());
+            todoItems.add(new ToDoItem(todoId, todoText.getText(), false));
             todoText.setText("");
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -111,11 +108,13 @@ public class Controller implements Initializable {
         try {
             System.out.println("Toggling item ...");
             ToDoItem todoItem = (ToDoItem) todoList.getSelectionModel().getSelectedItem();
+            System.out.println(todoItem.getId());
+            db.toggleToDo(conn, todoItem.getId());
             if (todoItem != null) {
                 todoItem.isDone = !todoItem.isDone;
                 todoList.setItems(null);
                 todoList.setItems(todoItems);
-                db.toggleToDo(conn, todoItem.id);
+
             }
         }catch (Exception exception){
             exception.printStackTrace();

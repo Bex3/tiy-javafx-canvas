@@ -20,10 +20,20 @@ public class ToDoDatabase {
         stmt.execute("CREATE TABLE IF NOT EXISTS todos (id IDENTITY, text VARCHAR, is_done BOOLEAN)");
     }
 
-    public void insertToDo(Connection conn, String text) throws SQLException {
+    public int insertToDo(Connection conn, String text) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO todos VALUES (NULL, ?, false)");
         stmt.setString(1, text);
         stmt.execute();
+
+
+        stmt = conn.prepareStatement("SELECT * FROM todos where text = ?");
+        stmt.setString(1, text);
+        ResultSet results = stmt.executeQuery();
+        results.next();//only getting the first record
+
+        return results.getInt("id");
+
+
     }
 
     public void deleteToDo(Connection conn, String text) throws SQLException {
