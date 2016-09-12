@@ -113,26 +113,21 @@ public class ToDoDatabaseTest {
 
         System.out.println("Create a new item");
         String toggleToDoText = "UnitTest-ToDolkhtdead";
-        Boolean testToggle = true;
+
 
         todoDatabase.insertToDo(conn, toggleToDoText);
 
         PreparedStatement stmt2 = conn.prepareStatement("SELECT * FROM todos WHERE text = ?" );
         stmt2.setString(1, toggleToDoText);
-//        stmt2.setBoolean(1, testToggle);
         ResultSet results2 = stmt2.executeQuery();
         results2.next();
         int toggleTestId = results2.getInt("id");
 
         boolean beforeToggletest = results2.getBoolean("is_done");
 
-//        ArrayList<ToDoItem> todosThis = todoDatabase.selectToDos(conn);
-
-        System.out.println("1 " + beforeToggletest);
-
+        System.out.println( beforeToggletest);
 
         todoDatabase.toggleToDo(conn, toggleTestId);
-
 
 //        stmt2 = conn.prepareStatement("SELECT * FROM todos WHERE text = ?" );
 //        stmt2.setString(1, toggleToDoText);
@@ -141,11 +136,9 @@ public class ToDoDatabaseTest {
         results2.next();
         boolean afterToggle = results2.getBoolean("is_done");
 
-
-
         System.out.println(afterToggle);
 
-       assertTrue(beforeToggletest != afterToggle);
+        assertTrue(beforeToggletest != afterToggle);
 
         todoDatabase.deleteToDo(conn, toggleToDoText);
 

@@ -45,10 +45,12 @@ public class Controller implements Initializable {
         try {
             db.init();
             conn = DriverManager.getConnection("jdbc:h2:./main");
+            savableList = db.selectToDos(conn);
 
             }catch (Exception exception){
             exception.printStackTrace();
             }
+            todoList.setItems(todoItems);
     }
 
 
@@ -86,10 +88,10 @@ public class Controller implements Initializable {
     public void addItem() {
         try {
             System.out.println("Adding item ...");
-            todoItems.add(new ToDoItem(todoText.getText()));
             db.insertToDo(conn, todoText.getText());
+            todoItems.add(new ToDoItem(todoText.getText()));
             todoText.setText("");
-        } catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
@@ -113,7 +115,7 @@ public class Controller implements Initializable {
                 todoItem.isDone = !todoItem.isDone;
                 todoList.setItems(null);
                 todoList.setItems(todoItems);
-                db.toggleToDo(conn,);
+                db.toggleToDo(conn, todoItem.id);
             }
         }catch (Exception exception){
             exception.printStackTrace();

@@ -39,7 +39,7 @@ public class ToDoDatabase {
             int id = results.getInt("id");
             String text = results.getString("text");
             boolean isDone = results.getBoolean("is_done");
-            items.add(new ToDoItem());
+            items.add(new ToDoItem(id, text, isDone));
         }
         return items;
     }
