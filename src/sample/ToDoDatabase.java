@@ -17,21 +17,21 @@ public class ToDoDatabase {
         // we'll add some implementation code here once we have a unit test method for it
 
         Server.createWebServer().start();
-        Connection connd = DriverManager.getConnection(DB_URL);
-        Statement stmt = connd.createStatement();
+        Connection conn = DriverManager.getConnection(DB_URL);
+        Statement stmt = conn.createStatement();
         stmt.execute("CREATE TABLE IF NOT EXISTS todos (id IDENTITY, text VARCHAR, is_done BOOLEAN, user_id INT)");
         stmt.execute("CREATE TABLE IF NOT EXISTS users (id IDENTITY, username VARCHAR, fullname VARCHAR)");
 
-        return connd;
+        return conn;
     }
 
-    public int insertUser(Connection conn, String username, String fullname) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO users VALUES (NULL, ?, ?)");
+    public int insertUser(Connection connt, String username, String fullname) throws SQLException {
+        PreparedStatement stmt = connt.prepareStatement("INSERT INTO users VALUES (NULL, ?, ?)");
         stmt.setString(1, username);
         stmt.setString(2, fullname);
         stmt.execute();
 
-        stmt = conn.prepareStatement("SELECT * FROM users where username = ?");
+        stmt = connt.prepareStatement("SELECT * FROM users where username = ?");
         stmt.setString(1, username);
         ResultSet results = stmt.executeQuery();
         results.next();//only getting the first record
@@ -46,11 +46,18 @@ public class ToDoDatabase {
     }
 
 
-    public void insertToDo(Connection conn, String text, int userID) throws SQLException {
+    public int insertToDo(Connection conn, String text, int userID) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO todos VALUES (NULL, ?, false, ?)");
         stmt.setString(1, text);
         stmt.setInt(2, userID);
         stmt.execute();
+
+        stmt = conn.prepareStatement("SELECT * FROM todos where text = ?");
+        stmt.setString(1, text);
+        ResultSet results = stmt.executeQuery();
+        results.next();//only getting the first record
+
+        return results.getInt("id");
     }
 
     public void deleteToDo(Connection conn, String text) throws SQLException {

@@ -29,7 +29,8 @@ public class SampleFXMLApp extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("todolist.fxml").openStream());
-        Controller controller = (Controller) fxmlLoader.getController();
+//        Controller controller = (Controller) fxmlLoader.getController();
+        Controller controller = fxmlLoader.getController();
 
         primaryStage.setTitle("TIY ToDo App");
         primaryStage.setScene(new Scene(root, 800, 600));
