@@ -31,33 +31,58 @@ public class Controller implements Initializable {
     ArrayList<ToDoItem> savableList = new ArrayList<ToDoItem>();
     String fileName = "todos.json";
 
-    public String username;
+    Connection conn;
+    ToDoDatabase db;
 
-
-    ToDoDatabase myToDoDatabase = new ToDoDatabase();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        db = new ToDoDatabase();
+        try{
+            db.init();
+        }catch (Exception exception){
+
+        }
         System.out.println("Starting");
         //myToDoDatabase.selectToDos(conn);
 
-        System.out.print("Please enter your name: ");
+        System.out.print("Please enter your email address aka your username: ");
         Scanner inputScanner = new Scanner(System.in);
-        username = inputScanner.nextLine();
+        User myUser = new User();
+        myUser.setUsername(inputScanner.nextLine());
 
-        if (username != null && !username.isEmpty()) {
-            fileName = username + ".json";
-        }
+
+//        if (username != null && !username.isEmpty()) {
+//            fileName = username + ".json";
+//        }
 
         System.out.println("Checking existing list ...");
-        ToDoItemList retrievedList = retrieveList();
-        if (retrievedList != null) {
-            for (ToDoItem item : retrievedList.todoItems) {
-                todoItems.add(item);
-            }
-        }
+//        ToDoItemList retrievedList = retrieveList();
+        int thisUserid = myUser.getUserId();
+        try {
 
-        todoList.setItems(todoItems);
+            savableList = db.selectToDosForUser(conn, thisUserid);
+
+            if (savableList != null) {
+                for (ToDoItem item : savableList) {
+                    todoItems.add(item);
+                }
+            } else {
+                System.out.println("Existing todo list not found, would you like to create one? y/n");
+                String createAccountQuestion = inputScanner.nextLine();
+                if (createAccountQuestion.equalsIgnoreCase("y")) {
+                    System.out.println("Please enter your full name");
+                    myUser.setFullname(inputScanner.nextLine());
+                    db.insertUser(conn, myUser.getUsername(), myUser.getFullname());
+                } else {
+                    System.out.println("Then why are you here?");
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("We had a new account exception");
+
+            todoList.setItems(todoItems);
+        }
     }
 
     public void saveToDoList() {

@@ -70,9 +70,9 @@ public class ToDoDatabase {
 //    }
 
     public void toggleToDo(Connection conn, int id) throws SQLException {
-//        PreparedStatement stmt = conn.prepareStatement("UPDATE todos SET is_done = NOT is_done WHERE id = ?");
-//        stmt.setInt(1, id);
-//        stmt.execute();
+        PreparedStatement stmt = conn.prepareStatement("UPDATE todos SET is_done = NOT is_done WHERE id = ?");
+        stmt.setInt(1, id);
+        stmt.execute();
     }
 
     public static ArrayList<ToDoItem> selectToDos(Connection conn) throws SQLException {
@@ -103,12 +103,23 @@ public class ToDoDatabase {
         }
         return items;
     }
-    public void selectUser(){
 
-    }
-
-
+        public User selectUser (Connection conn, String username) throws SQLException{
+            Statement stmt = conn.createStatement();
+            ResultSet results = stmt.executeQuery("SELECT * FROM users WHERE username = ?");
+            if (results.equals(username)){
+                User myUser = new User();
+                myUser.setUsername(results.getString("username"));
+                return myUser;
+            } else {
+                return null;
+            }
+        }
 }
+
+
+
+
 
 
 

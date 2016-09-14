@@ -119,54 +119,40 @@ public class ToDoDatabaseTest {
 
     @Test
     public void testToggle() throws Exception{
-        Connection conn = DriverManager.getConnection(ToDoDatabase.DB_URL);
+            Connection conn = DriverManager.getConnection(ToDoDatabase.DB_URL);
 
-        System.out.println("Create a new item");
-        String toggleToDoText = "UnitTest-ToDoToggle";
-        //todoDatabase.insertToDo(conn, toggleToDoText);
+            System.out.println("Create a new item");
+            String toggleUserName = "dismyemail@gmail.com";
+            String toggleFullName = "Testy McTesterson";
 
-        ArrayList<ToDoItem> todos = todoDatabase.selectToDos(conn);
+            String toggleToDoText = "UnitTest-ToDolkhtdead";
+            int userID = todoDatabase.insertUser(conn, toggleUserName, toggleFullName);
 
-        boolean beforeToggletest = todos.get(0).isDone;
-
-        todoDatabase.toggleToDo(conn, todos.get(0).id);
-
-        todos = todoDatabase.selectToDos(conn);
-
-        assertTrue(beforeToggletest != todos.get(0).isDone);
+            todoDatabase.insertToDo(conn, toggleToDoText, userID);
 
 
+            PreparedStatement stmt2 = conn.prepareStatement("SELECT * FROM todos WHERE text = ?" );
+            stmt2.setString(1, toggleToDoText);
+            ResultSet results2 = stmt2.executeQuery();
+            results2.next();
+            int toggleTestId = results2.getInt("id");
 
+            boolean beforeToggletest = results2.getBoolean("is_done");
 
+            System.out.println( beforeToggletest);
 
+            todoDatabase.toggleToDo(conn, toggleTestId);
 
+            results2 = stmt2.executeQuery();
+            results2.next();
+            boolean afterToggle = results2.getBoolean("is_done");
 
-//        System.out.println("Found " + todos.size() + " todos in the database");
-//
-//
-//        System.out.println("Retrieve it - save id");
-//        PreparedStatement stmt = conn.prepareStatement("SELECT * todos WHERE text = ?" );
-//        stmt.execute("INSERT INTO tododatabase VALUES (NULL,'UnitTest-ToDoToggle', NOT is_done)");
-//
-//
-//        ResultSet results = stmt.executeQuery();
-//        int toggleTestId = results.getInt("id");
-//
-//        System.out.println("Change it/call toggle method");
-//        todoDatabase.toggleToDo(conn, toggleTestId); //does this save it?
-//
-//
-//        System.out.println("retrieve it by id & ensure it's been toggled");
-//        PreparedStatement stmtCheck = conn.prepareStatement("SELECT * FROM todos WHERE id = ?");
-//        ResultSet resultsAfterToggle = stmtCheck.executeQuery();
-//        //boolean toggleT = resultsAfterToggle.getBoolean("is_done");
-//
-//
-//        //assertEquals("not is_done", toggleT);
-//
-//
-//        System.out.println("delete it... by id");
-//        //todoDatabase.deleteToDo(conn, toggleToDoText);
+            System.out.println(afterToggle);
+
+            assertTrue(beforeToggletest != afterToggle);
+
+            todoDatabase.deleteToDo(conn, toggleToDoText);
+            todoDatabase.deleteUser(conn, toggleUserName);
 
     }
 
