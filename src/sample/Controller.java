@@ -48,24 +48,22 @@ public class Controller implements Initializable {
         }
         System.out.println("Starting");
 
-        System.out.println("If you have an existing account please type e, if you would like to create a new account please type n.......");
+        System.out.println("If you have an existing account please type e, and/or if you would like to create a new account please type n.......");
         Scanner inputScanner = new Scanner(System.in);
         String userInput = inputScanner.nextLine();
         try {
             if (userInput.equalsIgnoreCase("e")) {
                 System.out.println("Existing account it is. ");
-                User tUser = new User();
                 System.out.println("Please enter your email");
 //                myUser.setUsername(inputScanner.nextLine());
                 String userName = inputScanner.nextLine();
-                tUser = db.selectUser(conn, userName);
-
-                userid = myUser.getUserId();
-
+                myUser = db.selectUser(conn, userName);
+                myUser.getUserId();
+                System.out.println(myUser.getUserId());
 
                 if (myUser!= null) {
-//                    int thisUserId = myUser.getUserId();
-//                    userid = db.insertUser(conn, myUser.getUsername(), myUser.getFullname());
+                   userid = myUser.getUserId();
+//                   userid = db.insertUser(conn, myUser.getUsername(), myUser.getFullname());
                     savableList = db.selectToDosForUser(conn, userid);
                     if (savableList != null) {
                         for (ToDoItem item : savableList) {
@@ -142,6 +140,9 @@ public class Controller implements Initializable {
             todoItem.isDone = !todoItem.isDone;
             todoList.setItems(null);
             todoList.setItems(todoItems);
+
+
+//            db.toggleToDo(conn, ); ***
 
 
         }

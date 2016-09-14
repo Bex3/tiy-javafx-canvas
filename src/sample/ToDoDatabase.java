@@ -116,13 +116,28 @@ public class ToDoDatabase {
     }
 
     public User selectUser (Connection conn, String username) throws SQLException{
-        Statement stmt = conn.createStatement();
-        ResultSet results = stmt.executeQuery("SELECT * FROM users WHERE username = ?");
-        if (results.equals(username)){
-            User myUser = new User();
-            myUser.setUsername(results.getString("username"));
-            myUser.setFullname(results.getString("Fullname")); // I hope I can make this work
-            myUser.setUserId(results.getInt("id"));
+
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE username = ?");
+        stmt.setString(1, username);
+
+        ResultSet results = stmt.executeQuery();
+
+
+
+//        if (results.equals(username)){
+         if(results != null){
+             User myUser = new User();
+             while (results.next()) {
+                 myUser.setUserId(results.getInt("id"));
+                 myUser.setUsername(results.getString("username"));
+                 myUser.setFullname(results.getString("fullname"));
+             }
+
+//             myUser.setUserId(results.getInt("id"));
+//             myUser.setUsername(results.getString("username"));
+//             myUser.setFullname(results.getString("fullname"));
+
+
             return myUser;
         } else {
             return null;
