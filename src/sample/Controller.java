@@ -141,9 +141,11 @@ public class Controller implements Initializable {
             todoList.setItems(null);
             todoList.setItems(todoItems);
 
-
-//            db.toggleToDo(conn, ); ***
-
+            try {
+                db.toggleToDo(conn, todoItem.getId());
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
 
         }
     }
