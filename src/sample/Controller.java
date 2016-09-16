@@ -76,7 +76,7 @@ public class Controller implements Initializable {
                 System.out.println("New account for you");
                 System.out.println("Please enter your email address");
                 String newEmail = inputScanner.nextLine();
-                System.out.println(newEmail);
+//                System.out.println(newEmail);
                 myUser = new User();
                 myUser.setUsername(newEmail);
                 System.out.println("Please enter your full name");

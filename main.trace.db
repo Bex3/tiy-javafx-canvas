@@ -645,3 +645,12 @@ org.h2.jdbc.JdbcSQLException: No data is available [2000-191]
 org.h2.jdbc.JdbcSQLException: No data is available [2000-191]
 2016-09-14 17:07:48 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLException: No data is available [2000-191]
+2016-09-14 18:49:05 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "USERS" not found; SQL statement:
+INSERT INTO users VALUES (NULL, ?, ?) [42102-191]
+2016-09-14 18:49:20 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "TODOS" not found; SQL statement:
+INSERT INTO todos VALUES (NULL, ?, false, ?) [42102-191]
+2016-09-14 18:49:24 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "TODOS" not found; SQL statement:
+INSERT INTO todos VALUES (NULL, ?, false, ?) [42102-191]

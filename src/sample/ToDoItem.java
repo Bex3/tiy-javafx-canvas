@@ -34,7 +34,7 @@ public class ToDoItem {
 
     @Override
     public String toString() {
-        System.out.println("converting the todo item to String ..." + text);
+//        System.out.println("converting the todo item to String ..." + text);
         if (isDone) {
             return text + " (done)";
         } else {

@@ -115,17 +115,13 @@ public class ToDoDatabase {
         return items;
     }
 
-    public User selectUser (Connection conn, String username) throws SQLException{
-
+    public User selectUser (Connection conn, String username) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE username = ?");
         stmt.setString(1, username);
-
         ResultSet results = stmt.executeQuery();
 
-
-
 //        if (results.equals(username)){
-         if(results != null){
+         if (results != null){
              User myUser = new User();
              while (results.next()) {
                  myUser.setUserId(results.getInt("id"));
